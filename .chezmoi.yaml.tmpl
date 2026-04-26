@@ -1,0 +1,19 @@
+sourceDir: {{ .chezmoi.sourceDir | quote }}
+
+data:
+  os: {{ .chezmoi.os | quote }}
+  arch: {{ .chezmoi.arch | quote }}
+  hostname: {{ .chezmoi.hostname | quote }}
+  
+  email: "{{ promptString "Email" }}"
+  name: "{{ promptString "Full name" }}"
+  username: "{{ .chezmoi.username | quote }}"
+  
+  isLinux: {{ eq .chezmoi.os "linux" }}
+  isDarwin: {{ eq .chezmoi.os "darwin" }}
+  isUbuntu: {{ contains "ubuntu" (lower (.chezmoi.osRelease.id | default "")) }}
+  isArchLinux: {{ contains "arch" (lower (.chezmoi.osRelease.id | default "")) }}
+
+scriptEnv:
+  CHEZMOI: "true"
+  CHEZMOI_OS: {{ .chezmoi.os | quote }}
