@@ -1,0 +1,72 @@
+#!/bin/bash
+
+set -eufo pipefail
+
+install_nf_font() {
+    FONT_DIR="$HOME/.local/share/fonts"
+    mkdir -p "$FONT_DIR"
+    TMPDIR=$(mktemp -d)
+    trap 'rm -fr "$TMPDIR"' EXIT
+    curl -fsSL -o "$TMPDIR/MapleMono-NF-unhinted.zip" \
+        https://github.com/subframe7536/maple-font/releases/download/v7.9/MapleMono-NF-unhinted.zip
+    unzip -u -d "FONT_DIR" "$TMPDIR/MapleMono-NF-unhinted.zip" '*.ttf'
+    fc-cache -f "$FONT_DIR"
+}
+
+# Install uv (Python package manager) if not present
+install_uv() {
+if ! command -v uv >/dev/null 2>&1; then
+    echo "🐍 Installing uv..."
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+fi
+}
+
+# Install fnm (Node.js version manager) if not present
+install_fnm() {
+if ! command -v fnm >/dev/null 2>&1; then
+    echo " Installing fnm..."
+    curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir "$HOME/.fnm" --skip-shell
+    ln -s $HOME/.fnm/fnm $HOME/.local/bin/fnm
+    eval "$(fnm env --use-on-cd --shell $(basename $SHELL))"
+fi
+}
+
+# Install fzf
+install_fzf() {
+    if [ ! -d $HOME/.fzf ]; then
+        git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf
+        $HOME/.fzf/install --key-bindings --completion --no-update-rc
+    fi
+}
+
+# Install tmux catppuccin theme
+install_tmux_theme() {
+    mkdir -p ~/.config/tmux/plugins/catppuccin
+    git clone -b v2.3.0 https://github.com/catppuccin/tmux.git ~/.config/tmux/plugins/catppuccin/tmux
+}
+
+{{ if .isUbuntu -}}
+    {{ if not .isWSL -}}
+        echo "📦 install nerd font ..."
+        install_nf_font
+    {{ end -}}
+    install_uv
+    install_fnm
+    install_fzf
+{{ end -}}
+
+{{ if .isUnixLike -}}
+    echo "Installing Node.JS Latest LTS..."
+    if ! command -v node >/dev/null 2>&1; then
+        fnm install --lts --use
+    fi
+
+    echo "Installing Python 3.12..."
+    if [ ! -f $HOME/.local/bin/python3 ]; then
+        uv python install 3.12 --default
+    fi
+
+    echo "Config TMUX..."
+    install_tmux_theme
+
+{{ end -}}

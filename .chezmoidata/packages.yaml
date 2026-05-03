@@ -1,0 +1,47 @@
+packages:
+  linux:
+    base:
+    - 'git'
+    - 'zsh'
+    - 'curl'
+    - 'wget'
+    - 'unzip'
+    - 'vim'
+    ubuntu:
+    - 'build-essential'
+    - 'zoxide'
+    - 'ripgrep'
+    - 'fd-find'
+    - 'eza'
+    - 'lsd'
+    - 'bat'
+    - 'tmux'
+    arch:
+    - 'fnm'
+    - 'uv'
+    - 'ripgrep'
+    - 'fd'
+    - 'fzf'
+    - 'zoxide'
+    - 'eza'
+    - 'lsd'
+    - 'bat'
+    - 'tmux'
+    - 'ttf-firacode-nerd'
+
+  darwin:
+    base:
+    - 'git'
+    - 'zsh'
+    brews:
+    - 'fnm'
+    - 'uv'
+    - 'ripgrep'
+    - 'fd'
+    - 'fzf'
+    - 'zoxide'
+    - 'eza'
+    - 'lsd'
+    casks:
+    - 'font-fira-code-nerd-font'
+    - 'raycast'

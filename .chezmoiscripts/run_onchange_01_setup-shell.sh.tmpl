@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -euo pipefail
+
+install_zplugin() {
+    if ! [ -d "$HOME/.zinit/bin" ]; then
+        mkdir -p "$HOME/.zinit/"
+        git clone https://github.com/zdharma-continuum/zinit.git "$HOME/.zinit/bin"
+        zsh -c "source $HOME/.zinit/bin/zinit.zsh; zinit self-update; zinit update --all"
+    fi
+}
+
+install_starship() {
+    if ! command -v starship >/dev/null 2>&1; then
+        curl -sS https://starship.rs/install.sh | sh -s -- -b=$HOME/.local/bin -y
+    fi
+}
+
+sudo chsh -s $(which zsh)
+
+{{ if .isUbuntu -}}
+    echo "Fuck bj"
+    install_starship
+{{ else if .isArchLinux -}}
+    sudo pacman -S --needed --noconfirm starship
+{{ else if .isDarwin -}}
+    brew install starship
+{{ else -}}
+    echo "⚠️ No supported system yet!"
+{{ end -}}
+
+if [command -v starship >/dev/null 2>&1] && [ ! -f $HOME/.config/starship.toml]; then
+    starship preset catppuccin-powerline -o $HOME/.config/starship.toml
+fi
+
+install_zplugin

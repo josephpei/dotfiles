@@ -1,0 +1,35 @@
+#!/bin/bash
+
+set -eufo pipefail
+
+install_ubuntu_packages() {
+    sudo apt update
+    sudo apt install -y {{ range .packages.linux.ubuntu }}{{ . }} {{ end }}
+}
+
+install_arch_packages() {
+    sudo pacman -Syyu
+    sudo pacman -S --needed --noconfirm {{ range .packages.linux.arch }}{{ . }} {{ end }}
+}
+
+install_mac_packages() {
+    brew update
+    brew bundle --file=/dev/stdin <<-EOF
+{{ range .packages.darwin.brews -}}
+brew "{{ . | quote }}"
+{{ end -}}
+{{ range .packages.darwin.casks -}}
+cask "{{ . | quote }}"
+{{ end -}}
+EOF
+}
+
+{{ if .isUbuntu -}}
+    install_ubuntu_packages
+{{ else if .isArchLinux -}}
+    install_arch_packages
+{{ else if .isDarwin -}}
+install_mac_packages
+{{ else -}}
+    echo "⚠️ No supported system yet!"
+{{ end -}}

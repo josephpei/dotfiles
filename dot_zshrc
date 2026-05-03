@@ -1,0 +1,78 @@
+# type dir name without cd
+setopt NO_AUTO_CD
+# list completions the bash way
+setopt BASH_AUTO_LIST
+# do not give bad glob pattern error
+setopt NO_BAD_PATTERN
+# ask to correct commands
+setopt CORRECT
+# ask to correct all arguments
+setopt NO_CORRECT_ALL
+# don't kill background jobs
+setopt NO_HUP
+
+# History
+export HISTFILE=${ZDOTDIR:-$HOME}/.zhistory
+export HISTSIZE=20000
+export SAVEHIST=10000
+
+# add more information to history
+setopt EXTENDED_HISTORY
+# expire duplicates first
+setopt HIST_EXPIRE_DUPS_FIRST
+# ignore dups when searching
+setopt HIST_FIND_NO_DUPS
+# do not store duplications
+setopt HIST_IGNORE_ALL_DUPS
+# removes blank lines
+setopt HIST_REDUCE_BLANKS
+# verity commands with subsitutions like !!
+setopt HIST_VERIFY
+# share history across sessions
+setopt SHARE_HISTORY
+
+if [ -f "$HOME/.zinit/bin/zinit.zsh" ]; then
+    # shellcheck source=../.zinit/bin/zinit.zsh
+    source "$HOME/.zinit/bin/zinit.zsh"
+
+    #if [ -z "$(command -v starship)" ]; then
+    #    zinit light romkatv/powerlevel10k
+    #fi
+    zinit ice atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
+	      atpull"%atclone" src"init.zsh"
+    zinit light starship/starship
+
+    zinit ice wait blockf atpull'zinit creinstall -q .'
+    zinit light zsh-users/zsh-completions
+
+    zinit ice wait atinit"zpcompinit; zpcdreplay"
+    zinit light zdharma-continuum/fast-syntax-highlighting
+
+    zinit ice wait atload"_zsh_autosuggest_start"
+    zinit light zsh-users/zsh-autosuggestions
+
+    zinit ice wait lucid
+    zinit load hlissner/zsh-autopair
+
+    if [ -z "$(command -v atuin)" ]; then
+        zinit ice wait"1" lucid
+        zinit load z-shell/zsh-navigation-tools
+    fi
+
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        zinit light iam4x/zsh-iterm-touchbar
+    fi
+
+
+fi
+
+if [ -e "$HOME/.config/shell" ]; then
+    for i in "$HOME/.config/shell/"*.sh; do
+        if [ -r "$i" ]; then
+            source "$i"
+	fi
+    done
+    unset i
+fi
+
+#eval "$(starship init zsh)"
