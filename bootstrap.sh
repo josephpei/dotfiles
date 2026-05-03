@@ -4,7 +4,7 @@ set -e
 echo "🚀 Starting chezmoi bootstrap..."
 
 detect_os() {
-    if [[ "$OSTYPE" == "darwin"* ]]; then
+    if [[ "$(uname -s)" == "Darwin" ]]; then
         echo "darwin"
     elif grep -qi ubuntu /etc/os-release 2>/dev/null; then
         echo "ubuntu"

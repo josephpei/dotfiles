@@ -5,15 +5,16 @@ data:
   arch: {{ .chezmoi.arch | quote }}
   hostname: {{ .chezmoi.hostname | quote }}
   
-  email: "{{ promptString "Email" }}"
-  name: "{{ promptString "Full name" }}"
-  username: "{{ .chezmoi.username | quote }}"
+  email: "{{ promptStringOnce . "email" "Email" }}"
+  name: "{{ promptStringOnce . "name" "Full name" }}"
   
   isLinux: {{ eq .chezmoi.os "linux" }}
   isDarwin: {{ eq .chezmoi.os "darwin" }}
   isUbuntu: {{ contains "ubuntu" (lower (.chezmoi.osRelease.id | default "")) }}
   isArchLinux: {{ contains "arch" (lower (.chezmoi.osRelease.id | default "")) }}
+  isWSL: {{ contains "microsoft" (lower (.chezmoi.kernel.osrelease | default "")) }}
+  isUnixLike: {{ eq .chezmoi.os "darwin" "freebsd" "linux" "openbsd" "unix" }}
 
 scriptEnv:
   CHEZMOI: "true"
-  CHEZMOI_OS: {{ .chezmoi.os | quote }}
+  OSTYPE: {{ .chezmoi.os | quote }}

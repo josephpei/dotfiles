@@ -1,0 +1,103 @@
+#!/bin/bash
+
+set -eufo pipefail
+
+echo "🔧 Installing packages for {{ .chezmoi.os }}/{{ .chezmoi.arch }}..."
+
+# get sudo access
+get_sudo() {
+    echo "please input sudo password"
+    sudo -v
+    while true; do
+        # sudo gives access for 300 seconds
+        sleep 290
+        sudo -v
+    done &
+}
+
+install_ubuntu_packages() {
+    if [ -f "/etc/apt/sources.list.d/ubuntu.sources" ]; then
+        #sudo sed -i 's/http:/https:/g' /etc/apt/sources.list.d/ubuntu.sources
+        sudo sed -i 's@//.*archive.ubuntu.com@//mirrors.ustc.edu.cn@g' /etc/apt/sources.list.d/ubuntu.sources
+    else
+        #sudo sed -i 's/http:/https:/g' /etc/apt/sources.list
+        sudo sed -i 's@//.*archive.ubuntu.com@//mirrors.ustc.edu.cn@g' /etc/apt/sources.list
+    fi
+    sudo apt update
+    sudo apt install -y {{ range .packages.linux.base }}{{ . }} {{ end }}
+    sudo apt install -y build-essential
+}
+
+install_arch_packages() {
+cat <<-EOF >> /etc/pacman.conf
+[archlinuxcn]
+Server = https://mirrors.ustc.edu.cn/archlinuxcn/$arch
+EOF
+    sudo sed -i -e '1iServer = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch\' /etc/pacman.d/mirrorlist
+    sudo pacman -Syyu
+    sudo pacman -S --needed --noconfirm archlinuxcn-keyring
+    sudo pacman -S --needed --noconfirm paru
+    sudo pacman -S --needed --noconfirm {{ range .packages.linux.base }}{{ . }} {{ end }}
+}
+
+install_mac_packages() {
+    brew update
+    brew bundle --file=/dev/stdin <<-EOF
+{{ range .packages.darwin.base -}}
+brew "{{ . | quote }}"
+{{ end -}}
+EOF
+}
+
+install_xcode() {
+    if ! xcode-select -p >/dev/null 2>&1; then
+        echo "🔨 Installing Xcode Command Line Tools..."
+        xcode-select --install
+
+        # Wait for installation to complete
+        echo "⏳ Waiting for Xcode Command Line Tools installation..."
+        retries=0
+        until xcode-select -p >/dev/null 2>&1; do
+            sleep 5
+            retries=$((retries + 1))
+            if [ "$retries" -ge 60 ]; then
+                echo "❌ Xcode Command Line Tools installation timed out"
+                exit 1
+            fi
+        done
+        echo "✅ Xcode Command Line Tools installed"
+    else
+        echo "✅ Xcode Command Line Tools already installed"
+    fi
+}
+
+install_homebrew() {
+    if ! command -v brew >/dev/null 2>&1; then
+        echo "🍺 Installing Homebrew..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        # Make brew available in this shell for any subsequent steps.
+        if [ -x /opt/homebrew/bin/brew ]; then
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        elif [ -x /usr/local/bin/brew ]; then
+            eval "$(/usr/local/bin/brew shellenv)"
+        fi
+    fi
+}
+
+
+get_sudo
+
+{{ if .isUbuntu -}}
+    echo "📦 Installing packages with apt..."
+    install_ubuntu_packages
+{{ else if .isArchLinux -}}
+    echo "📦 Installing packages with pacman..."
+    install_arch_packages
+
+{{ else if .isDarwin -}}
+install_xcode
+install_homebrew
+
+{{ else -}}
+    echo "⚠️ No supported package manager found (apt, pacman)"
+{{ end -}}
