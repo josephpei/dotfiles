@@ -1,4 +1,6 @@
+#!/usr/bin/env bash
 # Linux related
+
 if [ "$OSTYPE" != "linux-gnu" ]; then
     return
 fi
@@ -27,7 +29,6 @@ unset dir
 export SYSTEMD_LESS="FRXMK"
 
 # extra PATHs
-export PATH=$HOME/.local/bin:$PATH
 for i in /home/linuxbrew/.linuxbrew $HOME/.linuxbrew /snap /opt/puppetlabs/bin; do
     if [ -d "$i" ]; then
         export PATH="$i/bin:$i/sbin:$PATH"

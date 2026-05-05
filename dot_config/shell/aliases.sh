@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
@@ -16,6 +18,11 @@ elif [ -n "$(command -v lsd)" ]; then
     alias tree='lsd --tree'
 fi
 
+if [ -n "$(command -v fdfind)" ]; then
+    # Debian use this name
+    alias fd='fdfind'
+fi
+
 if [ -n "$(command -v zoxide)" ]; then
     if [ "$(basename "$SHELL")" = "zsh" ]; then
         eval "$(zoxide init --cmd cd zsh)"
@@ -32,7 +39,7 @@ if [ -n "$(command -v fnm)" ]; then
 	fi
 fi
 
-if [ -n "$(command -v fnm)" ]; then
+if [ -n "$(command -v uv)" ]; then
     if [ "$(basename "$SHELL")" = "zsh" ]; then
 		eval "$(uv generate-shell-completion zsh)"
 	elif [ -n "$BASH" ]; then
@@ -40,10 +47,10 @@ if [ -n "$(command -v fnm)" ]; then
 	fi
 fi
 
-if [ -n "$(command -v fnm)" ]; then
+if [ -n "$(command -v fzf)" ]; then
     if [ "$(basename "$SHELL")" = "zsh" ]; then
-        [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+        source <(fzf --zsh)
 	elif [ -n "$BASH" ]; then
-        [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+        source <(fzf --zsh)
     fi
 fi

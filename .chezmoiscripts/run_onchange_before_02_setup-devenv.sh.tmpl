@@ -32,17 +32,24 @@ fi
 }
 
 # Install fzf
-install_fzf() {
+install_tools() {
     if [ ! -d $HOME/.fzf ]; then
         git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf
         $HOME/.fzf/install --key-bindings --completion --no-update-rc
+        ln -s $HOME/.fzf/bin/fzf $HOME/.local/bin/fzf
+    fi
+
+    if [ ! -f $HOME/.local/bin/zoxide ]; then
+        curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
     fi
 }
 
 # Install tmux catppuccin theme
 install_tmux_theme() {
-    mkdir -p ~/.config/tmux/plugins/catppuccin
-    git clone -b v2.3.0 https://github.com/catppuccin/tmux.git ~/.config/tmux/plugins/catppuccin/tmux
+    if [ ! -d $HOME/.config/tmux/plugins/catppuccin ]; then
+        mkdir -p ~/.config/tmux/plugins/catppuccin
+        git clone -b v2.3.0 https://github.com/catppuccin/tmux.git ~/.config/tmux/plugins/catppuccin/tmux
+    fi
 }
 
 {{ if .isUbuntu -}}
@@ -52,7 +59,7 @@ install_tmux_theme() {
     {{ end -}}
     install_uv
     install_fnm
-    install_fzf
+    install_tools
 {{ end -}}
 
 {{ if .isUnixLike -}}

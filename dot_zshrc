@@ -31,6 +31,8 @@ setopt HIST_VERIFY
 # share history across sessions
 setopt SHARE_HISTORY
 
+export PATH=$HOME/.local/bin:$PATH
+
 if [ -f "$HOME/.zinit/bin/zinit.zsh" ]; then
     # shellcheck source=../.zinit/bin/zinit.zsh
     source "$HOME/.zinit/bin/zinit.zsh"
@@ -53,6 +55,10 @@ if [ -f "$HOME/.zinit/bin/zinit.zsh" ]; then
 
     zinit ice wait lucid
     zinit load hlissner/zsh-autopair
+
+    zinit light junegunn/fzf
+    #zinit light Aloxaf/fzf-tab
+    zinit light ajeetdsouza/zoxide
 
     if [ -z "$(command -v atuin)" ]; then
         zinit ice wait"1" lucid

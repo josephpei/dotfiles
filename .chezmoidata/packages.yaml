@@ -9,7 +9,6 @@ packages:
     - 'vim'
     ubuntu:
     - 'build-essential'
-    - 'zoxide'
     - 'ripgrep'
     - 'fd-find'
     - 'eza'
