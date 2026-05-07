@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 
 set -eufo pipefail
 
@@ -64,7 +64,7 @@ install_tmux_theme() {
 
 {{ if .isUnixLike -}}
     echo "Installing Node.JS Latest LTS..."
-    if ! command -v node >/dev/null 2>&1; then
+    if ! command -v node>/dev/null 2>&1; then
         eval "$(fnm env --use-on-cd --shell $(basename $SHELL))"
         fnm install --lts --use
     fi

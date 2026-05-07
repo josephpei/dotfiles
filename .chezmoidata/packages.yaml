@@ -27,6 +27,10 @@ packages:
     - 'bat'
     - 'tmux'
     - 'ttf-firacode-nerd'
+    arch-aur:
+    - 'google-chrome'
+    - 'visual-studio-code-bin'
+    - 'maplemono-nf'
 
   darwin:
     base:
