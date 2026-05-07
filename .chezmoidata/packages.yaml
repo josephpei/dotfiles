@@ -27,7 +27,7 @@ packages:
     - 'bat'
     - 'tmux'
     - 'ttf-firacode-nerd'
-    arch-aur:
+    arch_aur:
     - 'google-chrome'
     - 'visual-studio-code-bin'
     - 'maplemono-nf'

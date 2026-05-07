@@ -10,6 +10,7 @@ install_ubuntu_packages() {
 install_arch_packages() {
     sudo pacman -Syyu
     sudo pacman -S --needed --noconfirm {{ range .packages.linux.arch }}{{ . }} {{ end }}
+    paru -S --needed --noconfirm {{ range .packages.linux.arch_aur }}{{ . }} {{ end }}
 }
 
 install_mac_packages() {
