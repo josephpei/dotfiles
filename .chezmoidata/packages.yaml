@@ -30,7 +30,7 @@ packages:
     arch_aur:
     - 'google-chrome'
     - 'visual-studio-code-bin'
-    - 'maplemono-nf'
+    - 'ttf-maplemono-nf-cn-unhinted'
 
   darwin:
     base:
