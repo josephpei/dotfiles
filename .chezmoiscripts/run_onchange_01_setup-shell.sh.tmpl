@@ -29,7 +29,7 @@ sudo chsh -s $(which zsh)
     echo "⚠️ No supported system yet!"
 {{ end -}}
 
-if [command -v starship >/dev/null 2>&1] && [ ! -f $HOME/.config/starship.toml]; then
+if command -v starship >/dev/null 2>&1 && [ ! -f $HOME/.config/starship.toml ]; then
     starship preset catppuccin-powerline -o $HOME/.config/starship.toml
 fi
 

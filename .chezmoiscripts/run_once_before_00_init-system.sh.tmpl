@@ -29,11 +29,11 @@ install_ubuntu_packages() {
 }
 
 install_arch_packages() {
-cat <<-EOF >> /etc/pacman.conf
+cat <<'EOF' | sudo tee -a  /etc/pacman.conf >/dev/null
 [archlinuxcn]
 Server = https://mirrors.ustc.edu.cn/archlinuxcn/$arch
 EOF
-    sudo sed -i -e '1iServer = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch\' /etc/pacman.d/mirrorlist
+    sudo sed -i '5iServer = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch\' /etc/pacman.d/mirrorlist
     sudo pacman -Syyu
     sudo pacman -S --needed --noconfirm archlinuxcn-keyring
     sudo pacman -S --needed --noconfirm paru

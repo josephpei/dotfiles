@@ -23,6 +23,14 @@ if [ -n "$(command -v fdfind)" ]; then
     alias fd='fdfind'
 fi
 
+if [ -n "$(command -v starship)" ]; then
+    if [ "$(basename "$SHELL")" = "zsh" ]; then
+        eval "$(starship init zsh)"
+    elif [ -n "$BASH" ]; then
+        eval "$(starship init zsh)"
+    fi
+fi
+
 if [ -n "$(command -v zoxide)" ]; then
     if [ "$(basename "$SHELL")" = "zsh" ]; then
         eval "$(zoxide init --cmd cd zsh)"

@@ -1,3 +1,5 @@
+autoload -Uz compinit && compinit
+
 # type dir name without cd
 setopt NO_AUTO_CD
 # list completions the bash way
@@ -40,9 +42,9 @@ if [ -f "$HOME/.zinit/bin/zinit.zsh" ]; then
     #if [ -z "$(command -v starship)" ]; then
     #    zinit light romkatv/powerlevel10k
     #fi
-    zinit ice atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
-	      atpull"%atclone" src"init.zsh"
-    zinit light starship/starship
+    # zinit ice atclone"starship init zsh > init.zsh; starship completions zsh > _starship" \
+	#       atpull"%atclone" src"init.zsh"
+    # zinit light starship/starship
 
     zinit ice wait blockf atpull'zinit creinstall -q .'
     zinit light zsh-users/zsh-completions
@@ -80,5 +82,3 @@ if [ -e "$HOME/.config/shell" ]; then
     done
     unset i
 fi
-
-#eval "$(starship init zsh)"
