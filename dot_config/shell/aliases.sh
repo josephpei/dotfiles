@@ -57,8 +57,8 @@ fi
 
 if [ -n "$(command -v fzf)" ]; then
     if [ "$(basename "$SHELL")" = "zsh" ]; then
-        source <(fzf --zsh)
+        [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 	elif [ -n "$BASH" ]; then
-        source <(fzf --bash)
+        [ -f ~/.fzf.bash ] && source ~/.fzf.bash
     fi
 fi
