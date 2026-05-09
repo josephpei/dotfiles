@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# aliases
 
 alias ll='ls -alF'
 alias la='ls -A'
@@ -27,7 +27,7 @@ if [ -n "$(command -v starship)" ]; then
     if [ "$(basename "$SHELL")" = "zsh" ]; then
         eval "$(starship init zsh)"
     elif [ -n "$BASH" ]; then
-        eval "$(starship init zsh)"
+        eval "$(starship init bash)"
     fi
 fi
 
@@ -59,6 +59,6 @@ if [ -n "$(command -v fzf)" ]; then
     if [ "$(basename "$SHELL")" = "zsh" ]; then
         source <(fzf --zsh)
 	elif [ -n "$BASH" ]; then
-        source <(fzf --zsh)
+        source <(fzf --bash)
     fi
 fi

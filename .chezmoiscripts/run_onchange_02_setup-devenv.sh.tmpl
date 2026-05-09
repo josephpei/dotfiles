@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
 set -eufo pipefail
 
@@ -27,7 +27,7 @@ if ! command -v fnm >/dev/null 2>&1; then
     echo " Installing fnm..."
     curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir "$HOME/.fnm" --skip-shell
     ln -s $HOME/.fnm/fnm $HOME/.local/bin/fnm
-    eval "$(fnm env --use-on-cd --shell $(basename $SHELL))"
+    # eval "$(fnm env --use-on-cd --shell $(basename $SHELL))"
 fi
 }
 
@@ -65,7 +65,7 @@ install_tmux_theme() {
 {{ if .isUnixLike -}}
     echo "Installing Node.JS Latest LTS..."
     if ! command -v node>/dev/null 2>&1; then
-        eval "$(fnm env --use-on-cd --shell $(basename $SHELL))"
+        eval "$(fnm env --use-on-cd --shell bash)"
         fnm install --lts --use
     fi
 

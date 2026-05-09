@@ -26,6 +26,7 @@ packages:
     - 'lsd'
     - 'bat'
     - 'tmux'
+    - 'adobe-source-han-sans-cn-fonts'
     - 'ttf-firacode-nerd'
     arch_aur:
     - 'google-chrome'

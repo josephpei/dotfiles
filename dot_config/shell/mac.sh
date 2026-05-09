@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# MacOS related
 
 if [[ "$OSTYPE" != "darwin"* ]]; then
     return

@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # Linux related
 
 if [ "$OSTYPE" != "linux-gnu" ]; then
