@@ -17,6 +17,7 @@ This will:
 - Apply all configurations automatically
 - Install platform-specific packages
 - Setup shell environment and git
+- Install modern CLI tools from GitHub
 
 ### Manual setup:
 
@@ -102,6 +103,20 @@ chezmoi managed         # List all managed files
 - Global .gitignore
 - Cross-platform package managers
 
+### Modern CLI Tools
+Automatically installed from GitHub releases:
+- **lazygit** - Git terminal UI
+- **ripgrep** (rg) - Fast grep replacement
+- **bat** - Cat with syntax highlighting
+- **fd** - Fast find replacement
+- **fzf** - Fuzzy finder
+- **eza** - Modern ls replacement (exa successor)
+- **bottom** (btm) - System monitor
+- **starship** - Customizable shell prompt
+- **delta** - Git diff viewer
+- **just** - Task runner
+- **zoxide** - Smart cd replacement
+
 ### Automatic Setup
 - Platform detection and initialization
 - Automatic package installation per OS:
@@ -110,6 +125,7 @@ chezmoi managed         # List all managed files
   - **Arch Linux**: pacman packages (nvm, uv, etc.)
 - SSH key generation
 - Shell environment setup
+- Modern tools installation with retry logic
 
 ## Customization
 
@@ -127,6 +143,7 @@ data:
 - **macOS**: Add to `install/Brewfile`
 - **Ubuntu**: Add to `install/packages-ubuntu.txt`
 - **Arch Linux**: Add to `install/packages-arch.txt`
+- **Modern CLI Tools**: Edit `.chezmoiscripts/run_onchange_install-modern-tools.sh.tmpl`
 
 ### Modifying Configurations
 Edit files in `home/` directory. Common files:
@@ -152,25 +169,40 @@ chezmoi diff              # Safe to review
 chezmoi revert            # Undo last changes
 ```
 
+### Modern tools not installing?
+The installer has built-in retry logic (3 attempts per tool). Check:
+```bash
+~/.local/bin              # Verify tools are in PATH
+echo $PATH                # Check PATH includes ~/.local/bin
+```
+
 ### Run setup scripts manually
 ```bash
 ~/.local/share/chezmoi/.chezmoiscripts/run_once_init-system.sh
+~/.local/share/chezmoi/.chezmoiscripts/run_onchange_install-modern-tools.sh.tmpl
 ```
 
 ## Directory Structure
 
 ```
 dotfiles/
-├── bootstrap.sh                    # One-line setup script
-├── .chezmoi.yaml.tmpl             # Chezmoi configuration
-├── .chezmoiignore                 # Files to ignore
-├── home/                          # Dotfiles to deploy
-│   ├── .chezmoiscripts/           # Automatic setup scripts
+├── bootstrap.sh                              # One-line setup script
+├── .chezmoi.yaml.tmpl                        # Chezmoi configuration
+├── .chezmoiignore                            # Files to ignore
+├── .chezmoiscripts/                          # Automatic setup scripts
+│   ├── run_once_init-system.sh.tmpl
+│   ├── run_onchange_install-packages.sh.tmpl
+│   ├── run_onchange_install-modern-tools.sh.tmpl
+│   ├── run_onchange_setup-shell.sh
+│   └── run_onchange_setup-git.sh
+├── home/                                     # Dotfiles to deploy
 │   ├── .config/
+│   │   ├── shell/
+│   │   └── ...
 │   ├── .gitconfig.tmpl
 │   └── .gitignore_global
-├── install/                       # Package lists
-│   ├── Brewfile                   # macOS packages
+├── install/                                  # Package lists
+│   ├── Brewfile                              # macOS packages
 │   ├── packages-ubuntu.txt
 │   └── packages-arch.txt
 └── README.md
@@ -183,6 +215,7 @@ dotfiles/
 3. **Use templates** - File names ending in `.tmpl` are templated (e.g., `.gitconfig.tmpl`).
 4. **Regular updates** - Run `chezmoi update` regularly to keep machines in sync.
 5. **Version control** - Commit changes to git: `git -C ~/.local/share/chezmoi add file && git -C ~/.local/share/chezmoi commit -m "message"`
+6. **Add to PATH** - Ensure `~/.local/bin` is in your `$PATH` for modern tools.
 
 ## Resources
 
